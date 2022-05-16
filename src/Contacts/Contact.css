@@ -1,0 +1,40 @@
+
+.list-group-item{
+     position: relative;
+    width: 100%;
+    padding:0%;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f4f8;
+    border-top: 1px solid #f0f4f8;
+    
+}
+
+
+.profile-pic{
+    width: 60px;
+    height: 60px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+}
+#name {
+    font-size: 30px;
+    display: inline-block;
+    position: relative;
+    margin-left: 15px;
+margin-top: 10px;
+}
+#last-messege{
+    padding: 0%;
+    position: relative;
+    margin-left: 17%; 
+}
+#last-messege-time{
+    padding: 0%;
+    position: relative;
+    display: inline-block;
+    float: right;
+    clear: both;
+    border-top-right-radius: 0px;
+    
+}

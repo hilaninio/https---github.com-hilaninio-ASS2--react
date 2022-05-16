@@ -1,0 +1,124 @@
+#chat-box-frame {
+    width: 100%;
+    height: 100%;
+}
+
+.my-chat {
+    background: rgb(192, 186, 185, .4);
+    height: 80px;
+    font-size: 30px;
+    position: relative;
+    border-radius: 10px;
+    width: 100%;
+
+}
+
+.send-line {
+    width: 100%;
+    height: 80px;
+    position: absolute;
+    border-radius: 10px;
+    bottom: 0px;
+}
+
+.send-input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+#send-button {
+    background-color: #78e6b6;
+    width: auto;
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    border-image: initial;
+    border-radius: 50%;
+    padding: 0.35%;
+    right: 45%;
+    margin-top: 2.6%;
+}
+
+.profile-pic {
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 60px;
+    height: 60px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+}
+
+#messege-input {
+  
+    width: 56.3%;
+    border-radius: 10px;
+    margin-top: 2.2%;
+}
+input[id=messege-input] {
+    width: 400px;
+    height: 50px;
+    padding: 16x 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-size: large;
+    font: Monospace;
+    padding-right: 11%;
+  }
+
+#butt-pic {
+    height: 50px;
+    width: 30px;
+}
+
+
+
+#upload-box {
+    margin-top: -30px;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.bi-image {
+    position: absolute;
+}
+
+.add-rec {
+    width: auto;
+    border-image: initial;
+    border-radius: 50%;
+    padding: 0.35%;
+    left: 48%;
+    margin-top: 1%;
+}
+
+#mic {
+    width: auto;
+    border-image: initial;
+    border-radius: 30%;
+    padding: 0.35%;
+    left: 47%;
+    margin-top: 2.7%;
+}
+
+#vid {
+    width: auto;
+    border-image: initial;
+    border-radius: 30%;
+    padding: 0.35%;
+    left: 49%;
+    margin-top: 2.7%;
+}
+#send_pic{
+    width: auto;
+    border-image: initial;
+    border-radius: 50%;
+    padding: 0.35%;
+    left: 45%;
+    margin-top: 2.7%;
+}
+Dropdown.Item{
+    height: 4%;
+}

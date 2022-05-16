@@ -1,0 +1,36 @@
+    .card-body{
+        height: 300px;
+        width: 470px;
+    }
+
+    
+
+      #login{        
+         width: 25%;
+         height: 30px;
+         text-align: start;
+         text-align-last: center;
+         text-size-adjust: 20;
+         margin: 8px 0;
+         font-size: medium;
+      }
+
+      .bi{
+         font-size: x-large; 
+         position: absolute;
+         margin-top: 20px;
+         margin-left: 10px;
+      }
+
+      
+
+      .Text{
+         background-color: rgba(235, 236, 156, 0.555);
+         top: 50%;
+       }
+
+
+      
+       .log-card {
+          padding-top: 8%;
+       }

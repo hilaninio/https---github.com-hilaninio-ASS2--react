@@ -1,0 +1,82 @@
+input[type=text] {
+    width: 400px;
+    height: 50px;
+    padding: 16x 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-size: large;
+    padding-left: 40px;
+  }
+
+  
+input[type=password] {
+    width: 400px;
+    height: 50px;
+    padding: 16x 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-size: large;
+    font: Monospace;
+    padding-left: 40px;
+  }
+form{
+  margin: 0;
+}
+  #reg{   
+    display: inline-block;     
+    width: 25%;
+    height: 30px;
+    text-align: start;
+    text-align-last: center;
+    text-size-adjust: 20;
+    margin: 8px 0;
+    font-size: medium;
+ }
+ .card-bod{
+ 
+
+ }
+
+ #choose-profile-img{
+  border: medium none;
+  border-radius: 50%;
+  width: 8%;
+ height: 8%;
+    position: absolute;
+    right: 25%;
+    top: 28%;
+ }
+
+ #prof{
+  right: 20%;
+  top:-20%;
+ }
+ #reg{
+  margin-right: 10% ;
+ }
+
+ #profil-img{
+   background-color: rgba(235, 236, 156, 0.555) ;
+   padding: 2%;
+ 
+    width: 40%;
+    
+    -webkit-border-radius: 40%;
+    -moz-border-radius: 40%;
+    border-radius: 50%;
+ }
+ .container1{
+  font-size:14px;
+  position: absolute;
+  
+  left: 25%;
+top: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  border-radius: 2px;
+  text-align: center;
+  overflow: hidden;
+ }
+ #regLink{
+   margin-bottom: 20%;
+ }

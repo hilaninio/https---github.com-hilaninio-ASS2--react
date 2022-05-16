@@ -1,0 +1,119 @@
+body {
+    background-color: #74EBD5;
+    background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
+  
+    min-height: 100vh;
+  }
+
+
+.list-group{
+    margin-left: 0%;
+    max-height: 100%;
+
+}
+
+
+
+.row{
+    height: 100%;
+    width: 100%;
+}
+.chat-container{
+    background-color: #ffffff;
+    height: 90%;
+    margin-top: 3.6%;
+    clear: both;
+    margin-left: 1%;
+    border-radius: 10px;
+    
+}
+.frame{
+    background-color: #ffffff;
+    height: 90%;
+    width: 100%;
+    margin-top: 5%;
+    margin-left: 5%;
+    border-radius: 10px;
+    float: left;
+    max-height: 100%;
+   
+}
+
+.myname{
+    background: rgb(192, 186, 185,.4);
+    height: 80px;
+    font-size: 30px;
+    position: relative;
+    border-radius: 10px;
+    
+}
+
+.profile-pic{
+    margin-right: 10px;
+    margin-left: 15px;
+    margin-top: 10px;
+    opacity: 1;
+}
+
+.txt {
+    font-size: 30px;
+    display: inline-block;
+    position: relative;
+    margin-right: 10px;
+   margin-left: 15px;
+   margin-top: 3%;
+   font-weight: bold;
+   font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   
+}
+
+.add-person{
+    background: #69c0d7 none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    height: 50px;
+    position: absolute;
+    right: 5%;
+    top: 15px;
+    width: 50px;
+}
+#add {
+    right: 12px;
+    top: -5px;
+}
+
+
+.chat-messeges{
+   
+    display: flex;
+    flex-direction: column;
+    
+   
+    
+}
+
+.Modal {
+    position: fixed;
+    margin: auto;  
+    margin-top: 8%;
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 20%;
+  }
+
+  .Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rebeccapurple;
+  }
+
+  #thelist{
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    overflow-y: auto;
+    max-height: 600px;
+  }
