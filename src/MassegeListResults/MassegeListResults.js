@@ -16,6 +16,7 @@ import './MassegeListResults.css';
 function MassegeListResults({mylist}) {
     
     const ChatMesseges = mylist.map((mes, key) => {
+        const typeOfMessege='';
         return <ChatMessege {...mes} key={key} />
     
       });

@@ -18,58 +18,99 @@ function ChatPage() {
   const [getName, setName] = useState('');
   const [getImg, setImg] = useState('');
   const [massegeList, setMassegeList] = useState([]);
-  var nickaName = UserList.find(user => user.isAcct==true).nickname;
-  var user = UserList.find(user => user.isAcct==true).name;
+  var nickaName = UserList.find(user => user.isAcct == true).nickname;
+  var user = UserList.find(user => user.isAcct == true).name;
   const [ContactList, setContactList] = useState([contactList]);
-  
 
-  useEffect(async() => {
-    const res = await fetch("http://localhost:5281/api/Contacts");
+  function addZero(i) {
+    if (i < 10) { i = "0" + i }
+    return i;
+  }
+
+  useEffect(async () => {
+    const path = "http://localhost:5281/api/"+ user +"/Contacts"
+    const res = await fetch(path);
     const data = await res.json();
+    data.forEach(obj => {
+      Object.entries(obj).forEach(([key, value]) => {
+        if (key == 'lastDate' && value != null) {
+          const date = new Date(value);
+          const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + '            ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+          obj.lastDate = newdate;
+        }
+      });
+    });
     setContactList(data);
   }, []);
 
 
-  var img= UserList.find(user => user.isAcct==true).img;
-  if (img==null) {
-    img=newperson;
+  var img = UserList.find(user => user.isAcct == true).img;
+  if (img == null) {
+    img = newperson;
   }
+
+
   //add get messeges request
-  const showChat = function (userName) {
-    setMassegeList(MessegeList[user].filter((ChatMessege) => ChatMessege.name.includes(userName)));
+  const showChat = async function (userName) {
+    
+    const path = 'http://localhost:5281/api/'+ user +'/Contacts/'+userName+'/messeges';
+   
+    const res = await fetch(path);
+    const d = await res.json();
+    //set time
+    d.forEach(obj => {
+      Object.entries(obj).forEach(([key, value]) => {
+        if (key == 'created') {
+          const date = new Date(value);
+          const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes());
+          obj.created = newdate;
+        }
+      });
+    });
+    setMassegeList(d);
+
     setVisible(true);
     setName(userName);
-   setImg(ContactList.find(Contact => Contact.name == userName).profile_im)
+    setImg(ContactList.find(Contact => Contact.name == userName).profile_im)
   }
-  //add??
-  //const showLastMessege = function (lastMessege, name,time) {
- //   var objIndex = ContactList.findIndex((obj => obj.name == name));
- //   setContactList((prev)=>{
- //     ContactList[objIndex].lastdate = time;
-//ContactList[objIndex].last = lastMessege;
-     
-   //   return ContactList;
- //   })
- // }
-//add getall request for contacts
+
+  const showLastMessege = async function () {
+    const res = await fetch("http://localhost:5281/api/" + user +"/Contacts");
+    const d = await res.json();
+    console.log(d);
+    d.forEach(obj => {
+      Object.entries(obj).forEach(([key, value]) => {
+        if (key == 'lastDate') {
+          const date = new Date(value);
+          const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + '    ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
+          obj.lastDate = newdate;
+        }
+      });
+    });
+    setContactList(d);
+  }
+
+  //add getall request for contacts
   const Contacts = ContactList.map((con, key) => {
-    return <Contact {...con} profile_im= {newperson} showChat={showChat} key={key} />
+    return <Contact {...con} profile_im={newperson} showChat={showChat} key={key} />
   });
 
   const [show, setShow] = useState(false);
+
+
   //add post request contacts
   const addContact = event => {
-    //console.log(this.props.nickaName);
     var thename = document.getElementById("username").value;
     if (!thename) {
       alert("type the contact name")
-  }
-  //add post request
-  else{
-    setShow(false);
-    setContactList(ContactList = ContactList.push({ profile_im: newperson, id: thename ,name: thename, last:'' , lastdate:''}));
-    showChat(thename);
-  }
+    }
+    //add post request
+    else {
+      setShow(false);
+      setContactList(ContactList = ContactList.push({ profile_im: newperson, id: thename, name: thename, last: '', lastdate: '' }));
+      showChat(thename);
+    }
   }
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -88,9 +129,9 @@ function ChatPage() {
                 </button>
               </div>
               <div id="thelist">
-              <ul id="listg" className="list-group ">
-                {Contacts}
-              </ul>
+                <ul id="listg" className="list-group ">
+                  {Contacts}
+                </ul>
               </div>
             </div>
           </div>
@@ -111,12 +152,12 @@ function ChatPage() {
               </Modal.Footer>
             </Modal>
           </form>
-          
+
         </div>
         <div className="col-7">
           <div className="chat-container">
             <div className="chat-messeges">
-            {visible && <ChatBox user={user} name={getName} showChat={showChat} img1={getImg}/>}
+              {visible && <ChatBox user={user} name={getName} showChat={showChat} showLastMessege={showLastMessege} img1={newperson} setMassegeList={setMassegeList} />}
               <MassegeListResults mylist={massegeList} />
             </div>
           </div>

@@ -8,11 +8,11 @@ import MessegeList from '../ChatMessege/MessegeList';
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"></link>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>import './Text_Field.css';</link>
 
-function Contact({profile_im, id , name, last, lastdate, showChat}) {
+function Contact({profile_im, id , name, last, lastDate, showChat}) {
     
 
     return (
-        <button type="button" className="list-group-item list-group-item-action" onClick={() => showChat(name)}>
+        <button type="button" className="list-group-item list-group-item-action" onClick={() => showChat(id)}>
         <img className="pull-left profile-pic" src={profile_im}></img>
                         <div className="about">
                             <div id="name" className="name">{name}</div> 
@@ -20,7 +20,7 @@ function Contact({profile_im, id , name, last, lastdate, showChat}) {
                             {last}
                             </div>   
                             <div id="last-messege-time"> 
-                            {lastdate}
+                            {lastDate}
                             </div>                               
                         </div>
                         </button>

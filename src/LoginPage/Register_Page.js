@@ -32,8 +32,6 @@ function Register_Page() {
     var nickname = document.getElementById("disname").value;
     var pass = document.getElementById("password").value;
     var pass2 = document.getElementById("register").value;
-
-
     if (thename.length < 8 || thename.length > 20) {
       alert('the username must be between 8 and 20 characters long')
     }
@@ -63,9 +61,6 @@ function Register_Page() {
 
     }
   }
-
-
-
 
   return (
     <div>
