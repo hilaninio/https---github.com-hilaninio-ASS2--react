@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Route } from "react-router-dom";
+import { Link, Route,useNavigate } from "react-router-dom";
 import './Home.css';
 import './Login_Page.css';
 import { useState } from "react";
@@ -7,6 +7,7 @@ import UserList from '../UserList/UserList';
 import ChatPage from '../ChatPage/ChatPage';
 
 function Home() {
+    const navigate = useNavigate();
     var thename = "user";
     const [isDisabled, setDisabled] = useState(false);
     const [validated, setValidated] = useState(false);
@@ -29,11 +30,7 @@ function Home() {
         else {
             setValidated(true);
             setDisabled(true);
-            for (let index = 0; index < UserList.length; index++) {
-                UserList[index].isAcct = false;  
-            }
-            var index = UserList.findIndex(({ name }) => name === thename);
-            UserList[index].isAcct = true; 
+            navigate('/ChatPage',{state:{userID:thename}});
         }
     }
     return (
@@ -47,13 +44,11 @@ function Home() {
                         <i className="bi bi-lock" ></i>
                         <input id="password" type="password" className="form-control" placeholder="password">
                         </input><br></br>
-                        <nav>
-                            <Link to="/ChatPage" >
+
                                 <button id="login" className="btn btn-info btn-block btn-signin" disabled={isDisabled} onClick={handleLogein} >Login</button>
-                            </Link></nav>
-                        <nav>
+                            
                             <Link to="/register_page" className="link-dark">Click here to register</Link>
-                        </nav>
+                
                     </form>
                 </div>
             </div>
