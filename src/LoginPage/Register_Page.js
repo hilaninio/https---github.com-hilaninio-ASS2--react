@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import newperson from '../ChatPage/newperson.jpeg'
 import ChatPage from '../ChatPage/ChatPage';
 import './Login_Page.css';
@@ -11,6 +11,7 @@ import MessegeList from '../ChatMessege/MessegeList';
 
 var thename 
 function Register_Page() {
+  const navigate = useNavigate();
   var profileImg;
   const uploadImg = React.useRef();
   const [isDisabled, setDisabled] = useState(false);
@@ -55,10 +56,7 @@ function Register_Page() {
       for (let index = 0; index < UserList.length; index++) {
         UserList[index].isAcct = false;
       }
-      UserList.push({ name: thename, nickname: nickname, password: pass, isAcct: true, img: getProfileImg })
-      contactList[thename]=[];
-      MessegeList[thename]=[];
-
+      navigate('/ChatPage',{state:{userID:thename}});
     }
   }
 
@@ -94,12 +92,12 @@ function Register_Page() {
           </form>
 
          
-          <nav> <Link to="/ChatPage" >
+
             <button id="reg" className="btn btn-info btn-block btn-signin" onClick={handleSubmit} disabled={isDisabled}>Register</button>
-          </Link><br></br>
+       
 
             <Link to="/" id="regLink" className="link-dark">already registered? Click here to login</Link>
-          </nav>
+         
 
 
         </div>
