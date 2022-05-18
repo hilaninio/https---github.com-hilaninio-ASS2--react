@@ -21,8 +21,8 @@ function ChatPage() {
   const [getName, setName] = useState('');
   const [getImg, setImg] = useState('');
   const [massegeList, setMassegeList] = useState([]);
-  var nickaName = UserList.find(user => user.isAcct == true).nickname;
-  var user = UserList.find(user => user.isAcct == true).name;
+  var nickaName = location.state.userID;
+  var user = location.state.userID;
   const [ContactList, setContactList] = useState([contactList]);
 
   function addZero(i) {
@@ -47,10 +47,8 @@ function ChatPage() {
   }, []);
 
 
-  var img = UserList.find(user => user.isAcct == true).img;
-  if (img == null) {
-    img = newperson;
-  }
+  var  img = newperson;
+ 
 
 
   //add get messeges request
@@ -116,7 +114,7 @@ function ChatPage() {
     }
     else {
       setShow(false);
-      const res = await fetch('http://localhost:5281/api/userID123/Contacts', {
+      const res = await fetch('http://localhost:5281/api/'+ user +'/Contacts', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
