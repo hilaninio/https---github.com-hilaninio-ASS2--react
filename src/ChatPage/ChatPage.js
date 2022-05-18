@@ -1,5 +1,6 @@
 import person from './person6.jpeg'
 import newperson from './newperson.jpeg'
+import {useLocation} from 'react-router-dom';
 import React, { Component, useEffect, useState } from 'react'
 import Contact from '../Contacts/Contact';
 import './ChatPage.css';
@@ -14,6 +15,8 @@ import MassegeListResults from '../MassegeListResults/MassegeListResults';
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"></link>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>import './Text_Field.css';</link>
 function ChatPage() {
+  const location = useLocation();
+  console.log(location.state.userID);
   const [visible, setVisible] = useState(false);
   const [getName, setName] = useState('');
   const [getImg, setImg] = useState('');
@@ -52,9 +55,7 @@ function ChatPage() {
 
   //add get messeges request
   const showChat = async function (userName) {
-    
     const path = 'http://localhost:5281/api/'+ user +'/Contacts/'+userName+'/messeges';
-   
     const res = await fetch(path);
     const d = await res.json();
     //set time
@@ -68,7 +69,6 @@ function ChatPage() {
       });
     });
     setMassegeList(d);
-
     setVisible(true);
     setName(userName);
     setImg(ContactList.find(Contact => Contact.name == userName).profile_im)
@@ -77,7 +77,6 @@ function ChatPage() {
   const showLastMessege = async function () {
     const res = await fetch("http://localhost:5281/api/" + user +"/Contacts");
     const d = await res.json();
-    console.log(d);
     d.forEach(obj => {
       Object.entries(obj).forEach(([key, value]) => {
         if (key == 'lastDate') {
@@ -100,18 +99,36 @@ function ChatPage() {
 
 
   //add post request contacts
-  const addContact = event => {
-    var thename = document.getElementById("username").value;
-    if (!thename) {
-      alert("type the contact name")
+  const addContact = async event => {
+    var id = document.getElementById("username").value;
+    var nickname = document.getElementById("nickname").value;
+    var service = document.getElementById("service").value;
+    if (!id || !nickaName || !service) {
+      alert("all fields are requeired")
     }
     //add post request
+    //add invitation
+    //אולי לעשות גט לאדם החדש, אם חוזר 400 לשלוח אינווטיישן ואם חוזר 200 לעשות פוסט של קונטקט חדש
+    else {  
+      const r = await fetch('http://'+service+'/api/invitations');
+    if (r.status == 400) {
+        alert("cant add this contact");
+    }
     else {
       setShow(false);
-      setContactList(ContactList = ContactList.push({ profile_im: newperson, id: thename, name: thename, last: '', lastdate: '' }));
-      showChat(thename);
+      const res = await fetch('http://localhost:5281/api/userID123/Contacts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: id, name: nickname, server: service})
+    });
+     const d = await res.json();
+      setContactList(d);
+      showChat(id);
     }
   }
+}
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
   return (
@@ -142,7 +159,12 @@ function ChatPage() {
               </Modal.Header>
               <Modal.Body>
                 <i className="bi bi-person"></i>
-                <input id="username" type="text" className="form-control" placeholder="contact's identifier">
+                <input id="username" type="text" className="form-control" placeholder="contact's identifier"></input><br></br>
+                <i className="bi bi-file-earmark-person"></i>
+                <input id="nickname" type="text" className="form-control" placeholder="contact's nickname">
+                </input><br></br>
+                <i className="bi bi-globe"></i>
+                <input id="service" type="text" className="form-control" placeholder="contact's service">
                 </input><br></br>
               </Modal.Body>
               <Modal.Footer>

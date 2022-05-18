@@ -7,19 +7,24 @@ import UserList from '../UserList/UserList';
 import ChatPage from '../ChatPage/ChatPage';
 
 function Home() {
-   
     var thename = "user";
     const [isDisabled, setDisabled] = useState(false);
     const [validated, setValidated] = useState(false);
-    const handleLogein = event => {
+    const handleLogein = async event => {
+        var isOK;
         thename = document.getElementById("username").value;
         var pass = document.getElementById("password").value;
         event.preventDefault();
-        if (!UserList.find( ({ name }) => name === thename)) {
-            alert("the username is not exist1")
-        }
-        else if ((UserList.find( ({ name }) => name === thename)).password != pass) {
-            alert("the password is not correct")
+        const r = await fetch('http://localhost:5281/api/user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: thename, password: pass })
+        });
+        //.then(Response =>Response.text()).then(text=> {isOK = text}) ;
+        if (r.status == 400) {
+            alert("username or password are incorrect");
         }
         else {
             setValidated(true);
@@ -29,10 +34,8 @@ function Home() {
             }
             var index = UserList.findIndex(({ name }) => name === thename);
             UserList[index].isAcct = true; 
-            
         }
     }
-    
     return (
         <div>
             <div id="Login_Page" className="container">
@@ -45,9 +48,9 @@ function Home() {
                         <input id="password" type="password" className="form-control" placeholder="password">
                         </input><br></br>
                         <nav>
-                        <Link to="/ChatPage" >
-                        <button id="login"  className="btn btn-info btn-block btn-signin" disabled={isDisabled} onClick={handleLogein} >Login</button>
-                        </Link></nav>
+                            <Link to="/ChatPage" >
+                                <button id="login" className="btn btn-info btn-block btn-signin" disabled={isDisabled} onClick={handleLogein} >Login</button>
+                            </Link></nav>
                         <nav>
                             <Link to="/register_page" className="link-dark">Click here to register</Link>
                         </nav>
