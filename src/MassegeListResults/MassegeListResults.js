@@ -12,12 +12,17 @@ import ChatBox from '../ChatBox/ChatBox';
 import '../ChatMessege/ChatMessege.css';
 import './MassegeListResults.css';
 
-
+var typeOfMessege;
 function MassegeListResults({mylist}) {
     
     const ChatMesseges = mylist.map((mes, key) => {
-        const typeOfMessege='';
-        return <ChatMessege {...mes} key={key} />
+        if (mes.sent.toString() == "true") {
+            console.log(mes.sent);
+            typeOfMessege='sendMessege';
+        } else {
+            typeOfMessege='recieveMessege';
+        }
+        return <ChatMessege {...mes} key={key} typeOfMessege={typeOfMessege}/>
     
       });
 

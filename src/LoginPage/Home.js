@@ -9,10 +9,12 @@ import ChatPage from '../ChatPage/ChatPage';
 function Home() {
     const navigate = useNavigate();
     var thename = "user";
+    
     const [isDisabled, setDisabled] = useState(false);
     const [validated, setValidated] = useState(false);
     const handleLogein = async event => {
-        var isOK;
+        var error;
+    var status1;
         thename = document.getElementById("username").value;
         var pass = document.getElementById("password").value;
         event.preventDefault();
@@ -22,10 +24,16 @@ function Home() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ id: thename, password: pass })
+        }).then(function (response){
+            status1 = response.status
+             return response.text().then(function (text){
+                error = text
+             })
+         
         });
-        //.then(Response =>Response.text()).then(text=> {isOK = text}) ;
-        if (r.status == 400) {
-            alert("username or password are incorrect");
+
+        if (status1 == 400) {
+            alert(error);
         }
         else {
             setValidated(true);

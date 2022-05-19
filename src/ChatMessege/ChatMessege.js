@@ -8,10 +8,10 @@ import { Link, Route } from "react-router-dom";
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>import './Text_Field.css';</link>
 
 
-function ChatMessege({ id, content, created, sent }) {
+function ChatMessege({ id, content, created, sent ,typeOfMessege}) {
   return (
     <div className="chat-box">
-      <div id='sendMessege'>
+      <div id= {typeOfMessege}>
         <div className="messege">
           <p>
             {content}

@@ -28,15 +28,14 @@ function Register_Page() {
   }
 
   const handleSubmit = async event => {
+    var error;
+    var status1;
     event.preventDefault();
     thename = document.getElementById("username").value;
     var nickname = document.getElementById("disname").value;
     var pass = document.getElementById("password").value;
     var pass2 = document.getElementById("register").value;
-    if (pass != pass2) {
-      alert("password must be identical");
-      return;
-    }
+    
     event.preventDefault();
     const r = await fetch('http://localhost:5281/api/add', {
       method: 'POST',
@@ -44,12 +43,19 @@ function Register_Page() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ id: thename, name: nickname, password: pass })
-    });
-    //.then(Response =>Response.text()).then(text=> {isOK = text}) ;
-    if (r.status == 400) {
-      alert("username or password are incorrect");
+    }).then(function (response){
+      status1 = response.status
+       return response.text().then(function (text){
+          error = text
+       })  
+  });
+    if (status1 == 400) {
+      alert(error);
     }
-    else {
+    else if (pass != pass2) {
+      alert("password must be identical");
+      return;
+    } else {
       setDisabled(true);
       navigate('/ChatPage', { state: { userID: thename } });
     }
