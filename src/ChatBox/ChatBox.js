@@ -30,9 +30,7 @@ function ChatBox({ user, name, showChat, showLastMessege, img1, setMassegeList }
     if (input == '') {
       return
     }
-    if (!isFile) {
-      //post messege
-      
+    if (!isFile) {      
       const r = await fetch('http://localhost:5281/api/' + user +'/Contacts/'+  name +'/messeges', {
         method: 'POST',
         headers: {

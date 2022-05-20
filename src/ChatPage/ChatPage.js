@@ -4,8 +4,8 @@ import {useLocation} from 'react-router-dom';
 import React, { Component, useEffect, useState } from 'react'
 import Contact from '../Contacts/Contact';
 import './ChatPage.css';
-import contactList from '../Contacts/contactList';
-import MessegeList from '../ChatMessege/MessegeList';
+
+
 import UserList from '../UserList/UserList';
 import ChatBox from '../ChatBox/ChatBox';
 import Modal from 'react-bootstrap/Modal'
@@ -16,14 +16,13 @@ import MassegeListResults from '../MassegeListResults/MassegeListResults';
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>import './Text_Field.css';</link>
 function ChatPage() {
   const location = useLocation();
-  console.log(location.state.userID);
   const [visible, setVisible] = useState(false);
   const [getName, setName] = useState('');
   const [getImg, setImg] = useState('');
   const [massegeList, setMassegeList] = useState([]);
   var nickaName = location.state.userID;
   var user = location.state.userID;
-  const [ContactList, setContactList] = useState([contactList]);
+  const [ContactList, setContactList] = useState([]);
 
   function addZero(i) {
     if (i < 10) { i = "0" + i }
@@ -104,11 +103,14 @@ function ChatPage() {
     if (!id || !nickaName || !service) {
       alert("all fields are requeired")
     }
-    //add post request
-    //add invitation
-    //אולי לעשות גט לאדם החדש, אם חוזר 400 לשלוח אינווטיישן ואם חוזר 200 לעשות פוסט של קונטקט חדש
-    else {  
-      const r = await fetch('http://'+service+'/api/invitations');
+       else {  
+      const r = await fetch('http://'+service+'/api/invitations', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({from: user, to: id, server: service})
+    });
     if (r.status == 400) {
         alert("cant add this contact");
     }
@@ -121,10 +123,21 @@ function ChatPage() {
         },
         body: JSON.stringify({ id: id, name: nickname, server: service})
     });
-     const d = await res.json();
-      setContactList(d);
+    //get new contact list
+    const r = await fetch('http://localhost:5281/api/'+ user +'/Contacts');
+    const data = await r.json();
+    data.forEach(obj => {
+      Object.entries(obj).forEach(([key, value]) => {
+        if (key == 'lastDate' && value != null) {
+          const date = new Date(value);
+          const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + '            ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+          obj.lastDate = newdate;
+        }
+      });
+    });
+    setContactList(data);
       showChat(id);
-    }
+    } 
   }
 }
   const handleShow = () => setShow(true);
