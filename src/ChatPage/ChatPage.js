@@ -67,8 +67,20 @@ function ChatPage() {
 
   var img = newperson;
 
-  connection.on("ReceiveContact", (id) => {
-  console.log('hi');
+  connection.on("ReceiveContact", async (id) => {
+    const path = "http://localhost:5281/api/" + user + "/Contacts"
+    const res = await fetch(path);
+    const data = await res.json();
+    data.forEach(obj => {
+      Object.entries(obj).forEach(([key, value]) => {
+        if (key == 'lastDate' && value != null) {
+          const date = new Date(value);
+          const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + '            ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+          obj.lastDate = newdate;
+        }
+      });
+    });
+    setContactList(data);
 });
 
   //add get messeges request
