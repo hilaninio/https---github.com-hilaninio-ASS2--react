@@ -188,6 +188,7 @@ const invokeMessege = async function (userI, nameOfUser) {
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
   return (
+    
     <div>
       <div className="row">
         <div className="col-5">
@@ -235,6 +236,8 @@ const invokeMessege = async function (userI, nameOfUser) {
         <div className="col-7">
           <div className="chat-container">
             <div className="chat-messeges">
+            <a className="link-to-rate link-dark" href="http://localhost:5281/rates" >Rate our application</a>
+    
               {visible && <ChatBox user={user} name={getName} showChat={showChat} invokeMessege={invokeMessege} showLastMessege={showLastMessege} img1={newperson} setMassegeList={setMassegeList} />}
               <MassegeListResults mylist={massegeList} />
             </div>
