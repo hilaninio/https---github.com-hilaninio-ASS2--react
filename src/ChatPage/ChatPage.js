@@ -1,11 +1,10 @@
 import person from './person6.jpeg'
 import newperson from './newperson.jpeg'
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import React, { Component, useEffect, useState } from 'react'
 import Contact from '../Contacts/Contact';
 import './ChatPage.css';
-
-
+import { HubConnectionBuilder , LogLevel} from '@microsoft/signalr';
 import UserList from '../UserList/UserList';
 import ChatBox from '../ChatBox/ChatBox';
 import Modal from 'react-bootstrap/Modal'
@@ -13,7 +12,8 @@ import MassegeListResults from '../MassegeListResults/MassegeListResults';
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"></link>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>import './Text_Field.css';</link>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>import './Text_Field.css';
+  <script src="~/lib/signalr/signalr.js"></script></link>
 function ChatPage() {
   const location = useLocation();
   const [visible, setVisible] = useState(false);
@@ -23,14 +23,34 @@ function ChatPage() {
   var nickaName = location.state.userID;
   var user = location.state.userID;
   const [ContactList, setContactList] = useState([]);
+  const connection = new HubConnectionBuilder()
+    .withUrl("http://localhost:5281/myHub")
+    .configureLogging(LogLevel.Information)
+    .build();
 
+  async function start() {
+    try {
+      await connection.start();
+      console.log("SignalR Connected.");
+    } catch (err) {
+      console.log(err);
+      setTimeout(start, 5000);
+    }
+  };
+
+  connection.onclose(async () => {
+    await start();
+  });
+
+  // Start the connection.
+  start();
   function addZero(i) {
     if (i < 10) { i = "0" + i }
     return i;
   }
 
   useEffect(async () => {
-    const path = "http://localhost:5281/api/"+ user +"/Contacts"
+    const path = "http://localhost:5281/api/" + user + "/Contacts"
     const res = await fetch(path);
     const data = await res.json();
     data.forEach(obj => {
@@ -45,14 +65,15 @@ function ChatPage() {
     setContactList(data);
   }, []);
 
+  var img = newperson;
 
-  var  img = newperson;
- 
-
+  connection.on("ReceiveContact", (id) => {
+  console.log('hi');
+});
 
   //add get messeges request
   const showChat = async function (userName) {
-    const path = 'http://localhost:5281/api/'+ user +'/Contacts/'+userName+'/messeges';
+    const path = 'http://localhost:5281/api/' + user + '/Contacts/' + userName + '/messeges';
     const res = await fetch(path);
     const d = await res.json();
     //set time
@@ -72,7 +93,7 @@ function ChatPage() {
   }
 
   const showLastMessege = async function () {
-    const res = await fetch("http://localhost:5281/api/" + user +"/Contacts");
+    const res = await fetch("http://localhost:5281/api/" + user + "/Contacts");
     const d = await res.json();
     d.forEach(obj => {
       Object.entries(obj).forEach(([key, value]) => {
@@ -94,7 +115,6 @@ function ChatPage() {
 
   const [show, setShow] = useState(false);
 
-
   //add post request contacts
   const addContact = async event => {
     var id = document.getElementById("username").value;
@@ -103,43 +123,48 @@ function ChatPage() {
     if (!id || !nickaName || !service) {
       alert("all fields are requeired")
     }
-       else {  
-      const r = await fetch('http://'+service+'/api/invitations', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({from: user, to: id, server: service})
-    });
-    if (r.status == 400) {
-        alert("cant add this contact");
-    }
     else {
-      setShow(false);
-      const res = await fetch('http://localhost:5281/api/'+ user +'/Contacts', {
+      const r = await fetch('http://' + service + '/api/invitations', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: id, name: nickname, server: service})
-    });
-    //get new contact list
-    const r = await fetch('http://localhost:5281/api/'+ user +'/Contacts');
-    const data = await r.json();
-    data.forEach(obj => {
-      Object.entries(obj).forEach(([key, value]) => {
-        if (key == 'lastDate' && value != null) {
-          const date = new Date(value);
-          const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + '            ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-          obj.lastDate = newdate;
-        }
+        body: JSON.stringify({ from: user, to: id, server: service })
       });
-    });
-    setContactList(data);
-      showChat(id);
-    } 
+      if (r.status == 400) {
+        alert("cant add this contact");
+      }
+      else {
+        setShow(false);
+        const res = await fetch('http://localhost:5281/api/' + user + '/Contacts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id: id, name: nickname, server: service })
+        });
+        //get new contact list
+        const r = await fetch('http://localhost:5281/api/' + user + '/Contacts');
+        const data = await r.json();
+        data.forEach(obj => {
+          Object.entries(obj).forEach(([key, value]) => {
+            if (key == 'lastDate' && value != null) {
+              const date = new Date(value);
+              const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + '            ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+              obj.lastDate = newdate;
+            }
+          });
+        });
+        setContactList(data);
+        try {
+          await connection.invoke("AddContact", id);
+      } catch (err) {
+          console.error(err);
+      }
+        showChat(id);
+      }
+    }
   }
-}
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
   return (
@@ -200,4 +225,3 @@ function ChatPage() {
   );
 }
 export default ChatPage;
-
