@@ -17,7 +17,7 @@ function MassegeListResults({mylist}) {
     
     const ChatMesseges = mylist.map((mes, key) => {
         if (mes.sent.toString() == "true") {
-            console.log(mes.sent);
+
             typeOfMessege='sendMessege';
         } else {
             typeOfMessege='recieveMessege';

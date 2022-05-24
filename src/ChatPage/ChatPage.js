@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import React, { Component, useEffect, useState } from 'react'
 import Contact from '../Contacts/Contact';
 import './ChatPage.css';
-import { HubConnectionBuilder , LogLevel} from '@microsoft/signalr';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import UserList from '../UserList/UserList';
 import ChatBox from '../ChatBox/ChatBox';
 import Modal from 'react-bootstrap/Modal'
@@ -18,27 +18,59 @@ function ChatPage() {
   const location = useLocation();
   const [visible, setVisible] = useState(false);
   const [getName, setName] = useState('');
-  const [getImg, setImg] = useState('');
   const [massegeList, setMassegeList] = useState([]);
   var nickaName = location.state.userID;
   var user = location.state.userID;
+  
   const [ContactList, setContactList] = useState([]);
-  const connection = new HubConnectionBuilder()
-    .withUrl("http://localhost:5281/myHub")
-    .configureLogging(LogLevel.Information)
-    .build();
+  const [connection, setConnection] = useState(null);
+  const [curUserName, setcurUserName] = useState('');
+  useEffect(() => {
+    const newConnection = new HubConnectionBuilder()
+      .withUrl("http://localhost:5281/myHub")
+      .configureLogging(LogLevel.Information)
+      .build();
 
-  async function start() {
-    try {
-      await connection.start();
-      console.log("SignalR Connected.");
-    } catch (err) {
-      console.log(err);
-     
+
+    setConnection(newConnection);
+  }, []);
+  useEffect(() => {
+    if (connection) {
+      connection.start()
+        .then(result => {
+          console.log('Connected!');
+
+          connection.on("ReceiveContact", async (id) => {
+            const path = "http://localhost:5281/api/" + user + "/Contacts"
+            const res = await fetch(path);
+            const data = await res.json();
+            data.forEach(obj => {
+              Object.entries(obj).forEach(([key, value]) => {
+                if (key == 'lastDate' && value != null) {
+                  const date = new Date(value);
+                  const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + '            ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                  obj.lastDate = newdate;
+                }
+              });
+            });
+            setContactList(data);
+          });
+
+          connection.on("ReceiveMessege", async (userI, nameOfUser) => {
+            if (nameOfUser == user) {
+              showLastMessege();
+              
+                showChat(userI);
+              }
+            
+          });
+
+        })
+        .catch(e => console.log('Connection failed: ', e));
     }
-  };
-  // Start the connection.
-  start();
+  }, [connection]);
+
+
   function addZero(i) {
     if (i < 10) { i = "0" + i }
     return i;
@@ -62,35 +94,17 @@ function ChatPage() {
 
   var img = newperson;
 
-  connection.on("ReceiveContact", async (id) => {
-    const path = "http://localhost:5281/api/" + user + "/Contacts"
-    const res = await fetch(path);
-    const data = await res.json();
-    data.forEach(obj => {
-      Object.entries(obj).forEach(([key, value]) => {
-        if (key == 'lastDate' && value != null) {
-          const date = new Date(value);
-          const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + '            ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-          obj.lastDate = newdate;
-        }
-      });
-    });
-    setContactList(data);
-});
-connection.on("ReceiveMessege", async (userI, nameOfUser) => {
-  if(nameOfUser==user){
- showChat(userI);
-}
-});
-const invokeMessege = async function (userI, nameOfUser) {
-  try {
-    await connection.invoke("AddMessege", userI,nameOfUser );
-} catch (err) {
-    console.error(err);
-}
-}
+
+  const invokeMessege = async function (userI, nameOfUser) {
+    try {
+      await connection.invoke("AddMessege", userI, nameOfUser);
+    } catch (err) {
+      console.error(err);
+    }
+  }
   //add get messeges request
   const showChat = async function (userName) {
+ 
     const path = 'http://localhost:5281/api/' + user + '/Contacts/' + userName + '/messeges';
     const res = await fetch(path);
     const d = await res.json();
@@ -107,10 +121,10 @@ const invokeMessege = async function (userI, nameOfUser) {
     setMassegeList(d);
     setVisible(true);
     setName(userName);
-    setImg(ContactList.find(Contact => Contact.name == userName).profile_im)
+
   }
 
-  
+
 
   const showLastMessege = async function () {
     const res = await fetch("http://localhost:5281/api/" + user + "/Contacts");
@@ -120,7 +134,6 @@ const invokeMessege = async function (userI, nameOfUser) {
         if (key == 'lastDate') {
           const date = new Date(value);
           const newdate = addZero(date.getHours()) + ':' + addZero(date.getMinutes()) + '    ' + date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-
           obj.lastDate = newdate;
         }
       });
@@ -178,9 +191,9 @@ const invokeMessege = async function (userI, nameOfUser) {
         setContactList(data);
         try {
           await connection.invoke("AddContact", id);
-      } catch (err) {
+        } catch (err) {
           console.error(err);
-      }
+        }
         showChat(id);
       }
     }
@@ -188,7 +201,7 @@ const invokeMessege = async function (userI, nameOfUser) {
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
   return (
-    
+
     <div>
       <div className="row">
         <div className="col-5">
@@ -236,8 +249,8 @@ const invokeMessege = async function (userI, nameOfUser) {
         <div className="col-7">
           <div className="chat-container">
             <div className="chat-messeges">
-            <a className="link-to-rate link-dark" href="http://localhost:5281/rates" >Rate our application</a>
-    
+              <a className="link-to-rate link-dark" href="http://localhost:5281/rates" >Rate our application</a>
+
               {visible && <ChatBox user={user} name={getName} showChat={showChat} invokeMessege={invokeMessege} showLastMessege={showLastMessege} img1={newperson} setMassegeList={setMassegeList} />}
               <MassegeListResults mylist={massegeList} />
             </div>
