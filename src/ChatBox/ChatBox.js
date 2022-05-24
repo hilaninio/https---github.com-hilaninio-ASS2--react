@@ -11,7 +11,7 @@ import Video from "../Video/Video";
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"></link>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>import './Text_Field.css';</link>
 
-function ChatBox({ user, name, showChat, showLastMessege, img1, setMassegeList }) {
+function ChatBox({ user, name, showChat,invokeMessege, showLastMessege, img1, setMassegeList }) {
   var isFile = false;
 
   const [inputValue, setInputValue] = useState("");
@@ -43,6 +43,7 @@ function ChatBox({ user, name, showChat, showLastMessege, img1, setMassegeList }
     showChat(name);
     //put request update contact list
     showLastMessege();
+    invokeMessege(user, name);
     isFile = false;
   }
 

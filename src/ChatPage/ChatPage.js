@@ -34,14 +34,9 @@ function ChatPage() {
       console.log("SignalR Connected.");
     } catch (err) {
       console.log(err);
-      setTimeout(start, 5000);
+     
     }
   };
-
-  connection.onclose(async () => {
-    await start();
-  });
-
   // Start the connection.
   start();
   function addZero(i) {
@@ -82,7 +77,18 @@ function ChatPage() {
     });
     setContactList(data);
 });
-
+connection.on("ReceiveMessege", async (userI, nameOfUser) => {
+  if(nameOfUser==user){
+ showChat(userI);
+}
+});
+const invokeMessege = async function (userI, nameOfUser) {
+  try {
+    await connection.invoke("AddMessege", userI,nameOfUser );
+} catch (err) {
+    console.error(err);
+}
+}
   //add get messeges request
   const showChat = async function (userName) {
     const path = 'http://localhost:5281/api/' + user + '/Contacts/' + userName + '/messeges';
@@ -103,6 +109,8 @@ function ChatPage() {
     setName(userName);
     setImg(ContactList.find(Contact => Contact.name == userName).profile_im)
   }
+
+  
 
   const showLastMessege = async function () {
     const res = await fetch("http://localhost:5281/api/" + user + "/Contacts");
@@ -227,7 +235,7 @@ function ChatPage() {
         <div className="col-7">
           <div className="chat-container">
             <div className="chat-messeges">
-              {visible && <ChatBox user={user} name={getName} showChat={showChat} showLastMessege={showLastMessege} img1={newperson} setMassegeList={setMassegeList} />}
+              {visible && <ChatBox user={user} name={getName} showChat={showChat} invokeMessege={invokeMessege} showLastMessege={showLastMessege} img1={newperson} setMassegeList={setMassegeList} />}
               <MassegeListResults mylist={massegeList} />
             </div>
           </div>
