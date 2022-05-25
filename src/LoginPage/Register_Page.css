@@ -32,10 +32,6 @@ form{
     margin: 8px 0;
     font-size: medium;
  }
- .card-bod{
- 
-
- }
 
  #choose-profile-img{
   border: medium none;
@@ -51,6 +47,7 @@ form{
   right: 20%;
   top:-20%;
  }
+ 
  #reg{
   margin-right: 10% ;
  }

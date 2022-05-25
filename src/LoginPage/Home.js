@@ -53,7 +53,7 @@ function Home() {
                         <input id="password" type="password" className="form-control" placeholder="password">
                         </input><br></br>
 
-                                <button id="login" className="btn btn-info btn-block btn-signin" disabled={isDisabled} onClick={handleLogein} >Login</button>
+                                <button id="login" className="btn btn-info btn-block btn-signin" disabled={isDisabled} onClick={handleLogein} >Login</button><br></br>
                             
                             <Link to="/register_page" className="link-dark">Click here to register</Link>
                 
