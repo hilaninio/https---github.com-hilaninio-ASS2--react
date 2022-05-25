@@ -31,7 +31,7 @@ function ChatPage() {
       .configureLogging(LogLevel.Information)
       .build();
     setConnection(newConnection);
-  }, []);
+  }, [getName]);
   useEffect(() => {
     if (connection) {
       connection.start()
@@ -57,8 +57,6 @@ function ChatPage() {
           connection.on("ReceiveMessege", async (userI, nameOfUser) => {
             if (nameOfUser == user) {
               showLastMessege();
-              console.log(getName);
-              console.log(userI);
               if (userI == getName){
                 showChat(userI);
               }
@@ -68,7 +66,7 @@ function ChatPage() {
         })
         .catch(e => console.log('Connection failed: ', e));
     }
-  }, [connection, getName]);
+  }, [connection,getName]);
 
 
   function addZero(i) {
