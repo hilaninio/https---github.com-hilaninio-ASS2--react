@@ -94,7 +94,7 @@ function Register_Page() {
 
 
 
-          <button id="reg" className="btn btn-info btn-block btn-signin" onClick={handleSubmit} disabled={isDisabled}>Register</button>
+          <button id="reg" className="btn btn-info btn-block btn-signin" onClick={handleSubmit} disabled={isDisabled}>Register</button><br></br>
 
 
           <Link to="/" id="regLink" className="link-dark">already registered? Click here to login</Link>
