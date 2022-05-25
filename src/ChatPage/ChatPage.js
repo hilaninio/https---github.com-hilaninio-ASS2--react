@@ -1,7 +1,7 @@
 import person from './person6.jpeg'
 import newperson from './newperson.jpeg'
 import { useLocation } from 'react-router-dom';
-import React, { Component, useEffect, useState } from 'react'
+import React, { Component, useEffect, useRef, useState } from 'react'
 import Contact from '../Contacts/Contact';
 import './ChatPage.css';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
@@ -21,7 +21,7 @@ function ChatPage() {
   const [massegeList, setMassegeList] = useState([]);
   var nickaName = location.state.userID;
   var user = location.state.userID;
-  
+  const theContact = useRef('');
   const [ContactList, setContactList] = useState([]);
   const [connection, setConnection] = useState(null);
   const [curUserName, setcurUserName] = useState('');
@@ -57,7 +57,8 @@ function ChatPage() {
           connection.on("ReceiveMessege", async (userI, nameOfUser) => {
             if (nameOfUser == user) {
               showLastMessege();
-              if (userI == getName){
+              console.log(theContact.current);
+              if (userI == theContact.current){
                 showChat(userI);
               }
               }
@@ -66,7 +67,7 @@ function ChatPage() {
         })
         .catch(e => console.log('Connection failed: ', e));
     }
-  }, [connection,getName]);
+  }, [connection]);
 
 
   function addZero(i) {
@@ -118,6 +119,7 @@ function ChatPage() {
     });
     setMassegeList(d);
     setVisible(true);
+    theContact.current = userName;
     setName(userName);
 
   }
