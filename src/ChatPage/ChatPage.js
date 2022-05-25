@@ -30,8 +30,6 @@ function ChatPage() {
       .withUrl("http://localhost:5281/myHub")
       .configureLogging(LogLevel.Information)
       .build();
-
-
     setConnection(newConnection);
   }, []);
   useEffect(() => {
@@ -59,16 +57,18 @@ function ChatPage() {
           connection.on("ReceiveMessege", async (userI, nameOfUser) => {
             if (nameOfUser == user) {
               showLastMessege();
-              
+              console.log(getName);
+              console.log(userI);
+              if (userI == getName){
                 showChat(userI);
               }
-            
+              }
           });
 
         })
         .catch(e => console.log('Connection failed: ', e));
     }
-  }, [connection]);
+  }, [connection, getName]);
 
 
   function addZero(i) {
