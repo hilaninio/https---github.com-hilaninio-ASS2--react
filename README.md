@@ -22,6 +22,7 @@ In this way you can communicate with users on another server.
 ![Image](./src/ChatPageImg.png)
 
 ## Getting Started
+type npm start in commend line. 
 register to the site and get started!
 
 ## Built With
