@@ -1,7 +1,7 @@
 # Ass2 server-client 
 
 ## about this project
-In the project we created Chat site with three pages:
+In this project we created Chat site with three pages:
 
 ### Login page
 On this page, existing users can log in to the site using their username and password stored in the server.<br>
@@ -24,6 +24,7 @@ In this way you can communicate with users on another server.<br>
 ![Image](./src/ChatPageImg.png)
 
 ## Getting Started
+Run the server from https://github.com/hilaninio/ASS2 <br>
 type npm start in commend line. <br>
 register to the site and get started!<br>
 
