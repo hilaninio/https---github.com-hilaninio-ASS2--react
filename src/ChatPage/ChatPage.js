@@ -36,8 +36,6 @@ function ChatPage() {
     if (connection) {
       connection.start()
         .then(result => {
-          console.log('Connected!');
-
           connection.on("ReceiveContact", async (id) => {
             const path = "http://localhost:5281/api/" + user + "/Contacts"
             const res = await fetch(path);
@@ -57,7 +55,6 @@ function ChatPage() {
           connection.on("ReceiveMessege", async (userI, nameOfUser) => {
             if (nameOfUser == user) {
               showLastMessege();
-              console.log(theContact.current);
               if (userI == theContact.current){
                 showChat(userI);
               }
@@ -157,12 +154,12 @@ function ChatPage() {
       alert("all fields are requeired")
     }
     else {
-      const r = await fetch('http://' + service + '/api/invitations', {
+      const r = await fetch('https://' + service + '/api/invitations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ from: user, to: id, server: service })
+        body: JSON.stringify({ from: user, to: id, server: 'localhost:5281' })
       });
       if (r.status == 400) {
         alert("cant add this contact");
