@@ -154,7 +154,7 @@ function ChatPage() {
       alert("all fields are requeired")
     }
     else {
-      const r = await fetch('https://' + service + '/api/invitations', {
+      const r = await fetch('http://' + service + '/api/invitations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
